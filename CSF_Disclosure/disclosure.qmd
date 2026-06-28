@@ -206,20 +206,6 @@ If you drive
 
 ::::
 
-## In the news
-
-:::: {.columns}
-
-::: {.column width="50%"}
-![](assets/Lecanemab_Guardian_crop.png){.nostretch fig-alt="Guardian headline: UK health regulator rejects lecanemab as a treatment for Alzheimer's" width="100%"}
-:::
-
-::: {.column width="50%"}
-![](assets/Lecanemab_Sun_crop.png){.nostretch fig-alt="The Sun headline: game-changing Alzheimer's drug lecanemab gets green light in the UK but won't be available on the NHS" width="100%"}
-:::
-
-::::
-
 ## Taking part in research
 
 :::: {.columns}
