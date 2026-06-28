@@ -25,6 +25,7 @@ resources:
   - assets/biomarker_cascade.html
   - assets/amyloid_aggregation.html
   - assets/plaque_formation.html
+  - assets/Tau_Pathology.html
   - assets/vendor
 ---
 
@@ -105,6 +106,20 @@ Zooms in on how amyloid clumps together.
 Plaque formation widget - now a self-contained, offline-safe build
 (React + ReactDOM vendored locally, JSX pre-compiled, no fetches).
 :::
+
+## A real plaque, under the microscope
+
+![](assets/Plaque-silver-stain.jpg){.nostretch fig-alt="A silver-stained amyloid plaque among brain cells, seen under the microscope" width="58%"}
+
+## {background-iframe="assets/Tau_Pathology.html" background-interactive="true"}
+
+::: {.notes}
+Tau pathology widget (self-contained standalone, offline-safe).
+:::
+
+## Tau tangles, under the microscope
+
+![](assets/Neurofibrillary_tangles_in_the_Hippocampus_HE_3.JPG){.nostretch fig-alt="Neurofibrillary tau tangles in hippocampal neurons, H and E stain" width="62%"}
 
 ## Keeping yourself physically well
 
