@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Biomarker Cascade in Alzheimer's Disease</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:           #0b1018;
+  --bg-2:         #11171f;
+  --bg-3:         #1a2230;
+  --panel:        #131a23;
+  --ink:          #e6edf3;
+  --ink-soft:     #b1bac4;
+  --ink-dim:      #7d8590;
+  --ink-faint:    #30363d;
+  --accent:       #58a6ff;
+  --accent-bright:#7cc5ff;
+  --accent-glow:  rgba(88, 166, 255, 0.18);
+  --line:         #21262d;
+  --line-dim:     #161a20;
+
+  --c-amyloid: #ff7b72;
+  --c-tau:     #ffa657;
+  --c-neuro:   #d2a8ff;
+  --c-cog:     #79c0ff;
+  --c-fn:      #56d364;
+
+  --sans:    'Inter', system-ui, -apple-system, sans-serif;
+  --mono:    'JetBrains Mono', ui-monospace, monospace;
+}
+
+html, body { height: 100%; background: var(--bg); color: var(--ink); font-family: var(--sans); overflow: hidden; }
+body {
+  display: flex; flex-direction: column;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(88,166,255,0.05) 0%, transparent 70%),
+    var(--bg);
+  font-feature-settings: 'cv11', 'ss01';
+}
+
+/* Masthead */
+.masthead {
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem;
+  padding: 1.3rem 2.2rem 1rem; border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.masthead-text .eyebrow {
+  font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.22em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 0.45rem;
+}
+.masthead h1 {
+  font-family: var(--sans); font-weight: 600; font-size: 1.7rem; line-height: 1.1;
+  letter-spacing: -0.02em; color: var(--ink);
+}
+.masthead h1 em { font-style: normal; color: var(--accent-bright); font-weight: 600; }
+.masthead .subtitle {
+  font-family: var(--sans); color: var(--ink-dim);
+  font-size: 0.86rem; margin-top: 0.4rem; font-weight: 400; letter-spacing: 0.005em;
+}
+
+/* Hint strip */
+.hint {
+  text-align: center; padding: 0.5rem 1rem;
+  font-family: var(--mono); font-size: 0.64rem; color: var(--ink-dim);
+  letter-spacing: 0.1em; text-transform: uppercase; flex-shrink: 0;
+  border-bottom: 1px solid var(--line-dim);
+  background: var(--bg-2);
+}
+.hint kbd {
+  background: var(--bg-3); border: 1px solid var(--ink-faint); padding: 0.1rem 0.4rem;
+  margin: 0 0.15rem; border-radius: 4px; font-family: inherit; color: var(--ink); font-size: 0.62rem;
+}
+
+/* Main stage layout */
+.stage {
+  flex: 1 1 auto;
+  display: grid; grid-template-columns: 1fr 22rem;
+  gap: 1.2rem; padding: 1rem 2.2rem; overflow: hidden; min-height: 0;
+}
+
+/* Chart pane */
+.chart-pane { display: flex; flex-direction: column; min-height: 0; gap: 0.4rem; }
+#chart {
+  flex: 1; width: 100%; min-height: 0;
+  background:
+    linear-gradient(180deg, var(--bg-2) 0%, var(--bg) 100%);
+  border: 1px solid var(--line); border-radius: 6px;
+  cursor: ew-resize; user-select: none; touch-action: none;
+}
+#chart text { user-select: none; }
+.x-labels {
+  display: flex; justify-content: space-between;
+  font-family: var(--mono); font-size: 0.6rem;
+  color: var(--ink-dim); letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.2rem 4rem 0 4rem;
+}
+
+/* Patient panel (right sidebar — no longer holds interpretation) */
+.patient-pane {
+  display: flex; flex-direction: column; gap: 0.8rem; min-height: 0;
+}
+.panel {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 0.85rem 1rem;
+  border-radius: 6px;
+}
+.panel-eyebrow {
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 0.55rem;
+  font-weight: 500;
+}
+.panel-eyebrow .sub { color: var(--ink-faint); margin-left: 0.3rem; text-transform: none; letter-spacing: 0.02em; }
+
+/* Stage banner */
+.stage-name {
+  font-family: var(--sans); font-weight: 600; font-size: 1.2rem;
+  line-height: 1.15; color: var(--ink); margin-bottom: 0.55rem;
+  letter-spacing: -0.01em;
+}
+.atn-chip {
+  display: flex; gap: 0.45rem; font-family: var(--mono);
+  font-size: 0.95rem; font-weight: 600; letter-spacing: 0.04em;
+}
+.atn-letter {
+  display: inline-flex; align-items: baseline; gap: 0.05rem;
+  padding: 0.22rem 0.55rem; border: 1px solid var(--ink-faint);
+  background: var(--bg-3); color: var(--ink-dim);
+  border-radius: 4px;
+}
+.atn-letter[data-pos="true"] { color: var(--ink); border-color: var(--accent); background: var(--accent-glow); }
+.atn-letter[data-letter="A"][data-pos="true"] { color: var(--c-amyloid); border-color: var(--c-amyloid); background: rgba(255,123,114,0.10); }
+.atn-letter[data-letter="T"][data-pos="true"] { color: var(--c-tau);     border-color: var(--c-tau);     background: rgba(255,166, 87,0.10); }
+.atn-letter[data-letter="N"][data-pos="true"] { color: var(--c-neuro);   border-color: var(--c-neuro);   background: rgba(210,168,255,0.10); }
+.position-x {
+  margin-top: 0.6rem; font-family: var(--mono); font-size: 0.62rem;
+  color: var(--ink-faint); letter-spacing: 0.06em;
+}
+
+/* Biomarker list */
+.bm-list { display: flex; flex-direction: column; }
+.bm-row {
+  display: grid; grid-template-columns: 0.55rem 1fr auto auto;
+  gap: 0.55rem; padding: 0.5rem 0.1rem;
+  border-bottom: 1px solid var(--line-dim); align-items: center;
+  cursor: pointer; transition: opacity 200ms;
+}
+.bm-row:last-child { border-bottom: none; }
+.bm-row[data-hidden="true"] { opacity: 0.32; }
+.bm-row .swatch {
+  width: 0.55rem; height: 0.55rem; border-radius: 50%;
+  background: var(--c); border: 1px solid var(--c);
+  transition: background 250ms;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.2);
+}
+.bm-row[data-hidden="true"] .swatch { background: transparent; }
+.bm-row .name {
+  font-family: var(--sans); font-size: 0.84rem; color: var(--ink);
+  line-height: 1.25; font-weight: 500;
+}
+.bm-row .name .detail {
+  display: block; font-family: var(--mono); font-size: 0.58rem;
+  color: var(--ink-dim); letter-spacing: 0.04em; margin-top: 0.1rem;
+  text-transform: uppercase; font-weight: 400;
+}
+.bm-row .value {
+  font-family: var(--mono); font-size: 0.74rem; color: var(--ink-soft);
+  font-variant-numeric: tabular-nums; min-width: 2.6rem; text-align: right;
+}
+.bm-row .flag {
+  font-family: var(--mono); font-size: 0.7rem; font-weight: 600;
+  width: 1.1rem; text-align: center; color: var(--ink-faint);
+}
+.bm-row[data-abn="true"] .value { color: var(--c); font-weight: 500; }
+.bm-row[data-abn="true"] .flag  { color: var(--c); }
+
+/* Interpretation — full-width strip below the stage */
+.interpretation-strip {
+  flex-shrink: 0;
+  margin: 0 2.2rem 0.8rem;
+  padding: 0.85rem 1.1rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 6px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1.1rem;
+  align-items: start;
+}
+.interpretation-strip .label {
+  font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--accent);
+  white-space: nowrap; padding-top: 0.15rem;
+  font-weight: 500;
+}
+.interpretation {
+  font-family: var(--sans); font-size: 0.92rem; line-height: 1.45;
+  color: var(--ink-soft); font-weight: 400;
+}
+.interpretation strong { color: var(--ink); font-weight: 600; }
+
+/* Footer / preset bar */
+.colophon {
+  flex-shrink: 0; padding: 0.55rem 2.2rem; border-top: 1px solid var(--line);
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  flex-wrap: wrap; background: var(--bg-2);
+}
+.presets, .meta {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-family: var(--mono); font-size: 0.6rem;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faint);
+}
+.presets button {
+  background: var(--bg-3); border: 1px solid var(--ink-faint);
+  color: var(--ink-soft); padding: 0.4rem 0.7rem;
+  font: inherit; letter-spacing: 0.08em; cursor: pointer; border-radius: 4px;
+  transition: border-color 160ms, color 160ms, background 160ms;
+}
+.presets button:hover { border-color: var(--accent); color: var(--accent-bright); background: var(--accent-glow); }
+.presets button.active { border-color: var(--accent); color: var(--accent-bright); background: var(--accent-glow); }
+.presets .label { color: var(--ink-dim); margin-right: 0.3rem; }
+
+@media (max-width: 1100px) {
+  .stage { grid-template-columns: 1fr; padding: 0.8rem 1rem; }
+  .interpretation-strip { margin: 0 1rem 0.6rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-text">
+    <div class="eyebrow">Interactive Model</div>
+    <h1>The <em>Biomarker Cascade</em> of Alzheimer's Disease</h1>
+    <div class="subtitle">After Jack et al., Lancet Neurology 2010 and 2013. Drag the cursor across the plot to explore the disease continuum.</div>
+  </div>
+</header>
+
+<div class="hint">
+  <kbd>drag</kbd> or <kbd>click</kbd> the chart &nbsp;·&nbsp;
+  <kbd>←</kbd>/<kbd>→</kbd> fine adjust &nbsp;·&nbsp;
+  <kbd>1</kbd>–<kbd>6</kbd> jump to stage &nbsp;·&nbsp;
+  click a biomarker row to toggle its curve
+</div>
+
+<main class="stage">
+
+  <section class="chart-pane">
+    <svg id="chart" viewBox="0 0 1000 500" preserveAspectRatio="none"></svg>
+    <div class="x-labels">
+      <span>Cognitively normal</span>
+      <span>Preclinical AD</span>
+      <span>SCD</span>
+      <span>MCI</span>
+      <span>Mild dementia</span>
+      <span>Moderate-severe</span>
+    </div>
+  </section>
+
+  <aside class="patient-pane">
+    <div class="panel">
+      <div class="panel-eyebrow">Position on continuum</div>
+      <div class="stage-name" id="stage-name">—</div>
+      <div class="atn-chip" id="atn-chip"></div>
+      <div class="position-x" id="position-x"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-eyebrow">Biomarkers <span class="sub">click to toggle</span></div>
+      <div class="bm-list" id="bm-list"></div>
+    </div>
+  </aside>
+
+</main>
+
+<div class="interpretation-strip">
+  <div class="label">Clinical Interpretation</div>
+  <p class="interpretation" id="interpretation">—</p>
+</div>
+
+<footer class="colophon">
+  <div class="presets">
+    <span class="label">Stage:</span>
+    <button data-preset="0" data-x="0.08">1 Normal</button>
+    <button data-preset="1" data-x="0.30">2 Preclinical</button>
+    <button data-preset="2" data-x="0.50">3 SCD</button>
+    <button data-preset="3" data-x="0.63">4 MCI</button>
+    <button data-preset="4" data-x="0.79">5 Mild AD</button>
+    <button data-preset="5" data-x="0.93">6 Moderate</button>
+  </div>
+  <div class="meta">
+    Jack et al. 2010, 2013 &nbsp;·&nbsp; NIA-AA Research Framework, 2018
+  </div>
+</footer>
+
+<script>
+"use strict";
+
+/* ---------- Constants ---------- */
+const VB = { w: 1000, h: 500 };
+const PAD = { l: 60, r: 140, t: 30, b: 60 };
+const PLOT = { w: VB.w - PAD.l - PAD.r, h: VB.h - PAD.t - PAD.b };
+
+/* ---------- Biomarkers ---------- */
+const biomarkers = [
+  { id: 'amyloid', name: 'Amyloid-β',         detail: 'CSF Aβ42/40 · amyloid-PET',     short: 'Aβ',     varColor: '--c-amyloid', x0: 0.20, k: 11, atn: 'A' },
+  { id: 'tau',     name: 'p-tau',             detail: 'CSF p-tau · tau-PET',           short: 'p-tau',  varColor: '--c-tau',     x0: 0.35, k: 10, atn: 'T' },
+  { id: 'neuro',   name: 'Neurodegeneration', detail: 'MRI atrophy · FDG-PET',         short: 'Neuro',  varColor: '--c-neuro',   x0: 0.50, k: 9,  atn: 'N' },
+  { id: 'cog',     name: 'Cognition',         detail: 'Neuropsychological testing',    short: 'Cog',    varColor: '--c-cog',     x0: 0.62, k: 9,  atn: null },
+  { id: 'fn',      name: 'Function',          detail: 'Activities of daily living',    short: 'Func',   varColor: '--c-fn',      x0: 0.78, k: 8,  atn: null }
+];
+const THRESHOLD = 0.5;
+
+/* ---------- Stages ---------- */
+const stages = [
+  { from: 0.00, to: 0.18, label: 'Cognitively normal',
+    text: 'No biomarker abnormalities. Cognition and function within normal limits for age.' },
+  { from: 0.18, to: 0.45, label: 'Preclinical AD',
+    text: 'Biomarker evidence of AD pathology without cognitive symptoms. Aβ deposition precedes detectable cognitive change by approximately 15 to 20 years.' },
+  { from: 0.45, to: 0.55, label: 'Subjective cognitive decline',
+    text: 'Self-reported or informant-reported cognitive concern. Objective neuropsychological testing typically within normal limits despite biomarker abnormality.' },
+  { from: 0.55, to: 0.72, label: 'Mild cognitive impairment',
+    text: 'Objective cognitive impairment without significant functional decline. Biomarker-positive amnestic MCI carries the highest risk of progression to AD dementia. This is the population in which anti-amyloid monoclonal antibody therapy is currently licensed.' },
+  { from: 0.72, to: 0.86, label: 'Mild dementia',
+    text: 'Cognitive impairment with measurable decline in instrumental activities of daily living. Anti-amyloid therapy remains licensed at this stage in early symptomatic disease.' },
+  { from: 0.86, to: 1.00, label: 'Moderate to severe dementia',
+    text: 'Substantial cognitive and functional impairment requiring assistance with basic activities of daily living. Anti-amyloid therapies are not licensed for use at this stage.' }
+];
+
+/* ---------- Math ---------- */
+const sigma = (x, x0, k) => 1 / (1 + Math.exp(-k * (x - x0)));
+
+function plotX(x) { return PAD.l + x * PLOT.w; }
+function plotY(y) { return PAD.t + (1 - y) * PLOT.h; }
+
+function curvePath(bm, n = 240) {
+  let d = '';
+  for (let i = 0; i <= n; i++) {
+    const x = i / n;
+    const y = sigma(x, bm.x0, bm.k);
+    d += (i ? ' L' : 'M') + plotX(x).toFixed(2) + ',' + plotY(y).toFixed(2);
+  }
+  return d;
+}
+
+/* ---------- SVG helper ---------- */
+const SVGNS = 'http://www.w3.org/2000/svg';
+function el(tag, attrs = {}, parent = null, text = null) {
+  const e = document.createElementNS(SVGNS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (text != null) e.textContent = text;
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+/* ---------- Build chart ---------- */
+const chart = document.getElementById('chart');
+
+// Defs (subtle drop-shadow on curves)
+const defs = el('defs', {}, chart);
+const filter = el('filter', { id: 'soft', x: '-20%', y: '-20%', width: '140%', height: '140%' }, defs);
+el('feGaussianBlur', { in: 'SourceGraphic', stdDeviation: '0.6' }, filter);
+
+// Stage bands
+const bands = el('g', { class: 'bands' }, chart);
+stages.forEach((s, i) => {
+  el('rect', {
+    x: plotX(s.from), y: PAD.t,
+    width: (s.to - s.from) * PLOT.w, height: PLOT.h,
+    fill: i % 2 ? 'rgba(255,255,255,0.012)' : 'rgba(255,255,255,0.028)'
+  }, bands);
+});
+
+// Stage band dividers + small label on each
+stages.forEach((s, i) => {
+  if (i > 0) {
+    el('line', {
+      x1: plotX(s.from), y1: PAD.t,
+      x2: plotX(s.from), y2: PAD.t + PLOT.h,
+      stroke: 'var(--line-dim)', 'stroke-width': 1, 'stroke-dasharray': '2 4'
+    }, bands);
+  }
+});
+
+// Y-axis ticks and labels
+const yAxis = el('g', { class: 'y-axis' }, chart);
+[0, 0.25, 0.5, 0.75, 1.0].forEach(yv => {
+  el('line', {
+    x1: PAD.l, y1: plotY(yv), x2: PAD.l + PLOT.w, y2: plotY(yv),
+    stroke: 'var(--line-dim)', 'stroke-width': 0.5
+  }, yAxis);
+  el('text', {
+    x: PAD.l - 8, y: plotY(yv) + 3,
+    fill: 'var(--ink-dim)', 'font-family': 'var(--mono)', 'font-size': 9,
+    'text-anchor': 'end'
+  }, yAxis, yv.toFixed(2));
+});
+
+// Y-axis label (rotated)
+el('text', {
+  transform: `translate(20, ${PAD.t + PLOT.h / 2}) rotate(-90)`,
+  fill: 'var(--ink-dim)', 'font-family': 'var(--mono)', 'font-size': 10,
+  'text-anchor': 'middle', 'letter-spacing': '0.12em'
+}, chart, 'BIOMARKER ABNORMALITY');
+
+// X-axis baseline
+el('line', {
+  x1: PAD.l, y1: PAD.t + PLOT.h, x2: PAD.l + PLOT.w, y2: PAD.t + PLOT.h,
+  stroke: 'var(--ink-faint)', 'stroke-width': 1
+}, chart);
+
+// X-axis tick marks (one per stage boundary)
+const xAxis = el('g', { class: 'x-axis' }, chart);
+stages.forEach((s, i) => {
+  const xMid = (s.from + s.to) / 2;
+  el('text', {
+    x: plotX(xMid), y: PAD.t + PLOT.h + 16,
+    fill: 'var(--ink-faint)', 'font-family': 'var(--mono)', 'font-size': 9,
+    'text-anchor': 'middle', 'letter-spacing': '0.08em'
+  }, xAxis, (i + 1).toString().padStart(2, '0'));
+});
+
+// Threshold horizontal line at y = 0.5
+const threshold = el('g', { class: 'threshold' }, chart);
+el('line', {
+  x1: PAD.l, y1: plotY(THRESHOLD),
+  x2: PAD.l + PLOT.w, y2: plotY(THRESHOLD),
+  stroke: 'var(--ink-faint)', 'stroke-width': 1, 'stroke-dasharray': '3 5'
+}, threshold);
+el('text', {
+  x: PAD.l + PLOT.w + 6, y: plotY(THRESHOLD) + 3,
+  fill: 'var(--ink-dim)', 'font-family': 'var(--mono)', 'font-size': 9,
+  'letter-spacing': '0.08em'
+}, threshold, 'threshold');
+
+// Curves
+const curvesG = el('g', { class: 'curves' }, chart);
+biomarkers.forEach(bm => {
+  const path = el('path', {
+    id: `curve-${bm.id}`,
+    d: curvePath(bm),
+    fill: 'none',
+    stroke: `var(${bm.varColor})`,
+    'stroke-width': 2.4,
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round'
+  }, curvesG);
+  bm._path = path;
+
+  // Curve label at right edge
+  const yEnd = sigma(0.99, bm.x0, bm.k);
+  const label = el('text', {
+    id: `label-${bm.id}`,
+    x: PAD.l + PLOT.w + 8,
+    y: plotY(yEnd) + 3,
+    fill: `var(${bm.varColor})`,
+    'font-family': 'var(--mono)', 'font-size': 10, 'font-weight': 500,
+    'letter-spacing': '0.04em'
+  }, curvesG, bm.short);
+  bm._label = label;
+});
+
+// Cursor (drawn last so it renders above everything)
+const cursorG = el('g', { class: 'cursor' }, chart);
+const cursorLine = el('line', {
+  id: 'cursor-line',
+  x1: 0, y1: PAD.t - 10, x2: 0, y2: PAD.t + PLOT.h,
+  stroke: 'var(--accent)', 'stroke-width': 1, 'stroke-dasharray': '2 3'
+}, cursorG);
+
+// Intersection dots, one per biomarker
+biomarkers.forEach(bm => {
+  const dot = el('circle', {
+    id: `dot-${bm.id}`,
+    r: 4.5,
+    fill: `var(${bm.varColor})`,
+    stroke: 'var(--bg)',
+    'stroke-width': 1.5
+  }, cursorG);
+  bm._dot = dot;
+});
+
+// Cursor handle (at top of cursor line)
+const handle = el('g', { id: 'cursor-handle', cursor: 'ew-resize' }, cursorG);
+el('circle', { r: 8, fill: 'var(--accent-bright)', stroke: 'var(--bg)', 'stroke-width': 2, cy: PAD.t - 14 }, handle);
+el('circle', { r: 3, fill: 'var(--bg)', cy: PAD.t - 14 }, handle);
+
+/* ---------- Patient panel build ---------- */
+const bmListEl = document.getElementById('bm-list');
+biomarkers.forEach(bm => {
+  const row = document.createElement('div');
+  row.className = 'bm-row';
+  row.dataset.id = bm.id;
+  row.style.setProperty('--c', `var(${bm.varColor})`);
+  row.innerHTML = `
+    <div class="swatch"></div>
+    <div class="name">${bm.name}<span class="detail">${bm.detail}</span></div>
+    <div class="value" data-role="value">—</div>
+    <div class="flag"  data-role="flag">·</div>
+  `;
+  row.addEventListener('click', () => {
+    bm._hidden = !bm._hidden;
+    update();
+  });
+  bm._row = row;
+  bmListEl.appendChild(row);
+});
+
+const atnChipEl = document.getElementById('atn-chip');
+['A', 'T', 'N'].forEach(letter => {
+  const span = document.createElement('span');
+  span.className = 'atn-letter';
+  span.dataset.letter = letter;
+  span.dataset.pos = 'false';
+  span.innerHTML = `${letter}<span data-role="sign">−</span>`;
+  atnChipEl.appendChild(span);
+});
+
+const stageNameEl    = document.getElementById('stage-name');
+const positionXEl    = document.getElementById('position-x');
+const interpretEl    = document.getElementById('interpretation');
+
+/* ---------- State ---------- */
+let cursorX = 0.30; // initial: preclinical
+
+/* ---------- Update ---------- */
+function findStage(x) {
+  for (const s of stages) if (x >= s.from && x < s.to) return s;
+  return stages[stages.length - 1];
+}
+
+function update() {
+  const cx = plotX(cursorX);
+
+  // Cursor visuals
+  cursorLine.setAttribute('x1', cx);
+  cursorLine.setAttribute('x2', cx);
+  handle.setAttribute('transform', `translate(${cx}, 0)`);
+
+  // Per-biomarker visuals
+  biomarkers.forEach(bm => {
+    const y = sigma(cursorX, bm.x0, bm.k);
+    const cy = plotY(y);
+    bm._dot.setAttribute('cx', cx);
+    bm._dot.setAttribute('cy', cy);
+
+    const hidden = !!bm._hidden;
+    bm._path.style.display  = hidden ? 'none' : '';
+    bm._label.style.display = hidden ? 'none' : '';
+    bm._dot.style.display   = hidden ? 'none' : '';
+    bm._row.dataset.hidden  = hidden ? 'true' : 'false';
+
+    const abn = !hidden && y >= THRESHOLD;
+    bm._row.dataset.abn = abn ? 'true' : 'false';
+    bm._row.querySelector('[data-role="value"]').textContent =
+      hidden ? '—' : Math.round(y * 100) + '%';
+    bm._row.querySelector('[data-role="flag"]').textContent =
+      hidden ? '·' : (abn ? '+' : '−');
+  });
+
+  // ATN chip
+  const aPos = !biomarkers[0]._hidden && sigma(cursorX, biomarkers[0].x0, biomarkers[0].k) >= THRESHOLD;
+  const tPos = !biomarkers[1]._hidden && sigma(cursorX, biomarkers[1].x0, biomarkers[1].k) >= THRESHOLD;
+  const nPos = !biomarkers[2]._hidden && sigma(cursorX, biomarkers[2].x0, biomarkers[2].k) >= THRESHOLD;
+  const flags = { A: aPos, T: tPos, N: nPos };
+  atnChipEl.querySelectorAll('.atn-letter').forEach(elx => {
+    const L = elx.dataset.letter;
+    const pos = flags[L];
+    elx.dataset.pos = pos ? 'true' : 'false';
+    elx.querySelector('[data-role="sign"]').textContent = pos ? '+' : '−';
+  });
+
+  // Stage + interpretation
+  const s = findStage(cursorX);
+  stageNameEl.textContent = s.label;
+  interpretEl.textContent = s.text;
+  positionXEl.textContent = `x = ${cursorX.toFixed(3)}`;
+
+  // Preset button highlight
+  document.querySelectorAll('.presets button').forEach(btn => {
+    const bx = parseFloat(btn.dataset.x);
+    btn.classList.toggle('active', s === findStage(bx));
+  });
+}
+
+/* ---------- Pointer interaction ---------- */
+let dragging = false;
+
+function pointerToX01(e) {
+  const r = chart.getBoundingClientRect();
+  // Account for the SVG's internal padding via viewBox math.
+  const xPx = e.clientX - r.left;
+  const xVB = (xPx / r.width) * VB.w;
+  const xInPlot = (xVB - PAD.l) / PLOT.w;
+  return Math.max(0, Math.min(1, xInPlot));
+}
+
+chart.addEventListener('pointerdown', e => {
+  dragging = true;
+  chart.setPointerCapture(e.pointerId);
+  cursorX = pointerToX01(e);
+  update();
+});
+chart.addEventListener('pointermove', e => {
+  if (!dragging) return;
+  cursorX = pointerToX01(e);
+  update();
+});
+chart.addEventListener('pointerup', e => {
+  dragging = false;
+  try { chart.releasePointerCapture(e.pointerId); } catch (_) {}
+});
+chart.addEventListener('pointercancel', () => { dragging = false; });
+
+/* ---------- Keyboard ---------- */
+document.addEventListener('keydown', e => {
+  if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) return;
+  const step = e.shiftKey ? 0.05 : 0.01;
+  switch (e.key) {
+    case 'ArrowRight':
+      e.preventDefault();
+      cursorX = Math.min(1, cursorX + step); update(); break;
+    case 'ArrowLeft':
+      e.preventDefault();
+      cursorX = Math.max(0, cursorX - step); update(); break;
+    case '1': case '2': case '3': case '4': case '5': case '6': {
+      const btn = document.querySelector(`.presets button[data-preset="${parseInt(e.key, 10) - 1}"]`);
+      if (btn) { cursorX = parseFloat(btn.dataset.x); update(); }
+      break;
+    }
+    case 'Home': cursorX = 0; update(); break;
+    case 'End':  cursorX = 1; update(); break;
+  }
+});
+
+/* ---------- Presets ---------- */
+document.querySelectorAll('.presets button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    cursorX = parseFloat(btn.dataset.x);
+    update();
+  });
+});
+
+/* ---------- Init ---------- */
+update();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; height: 100%; background: #04060a; }
+  </style>
+</helmet>
+<div style="position: fixed; inset: 0; background: #04060a; overflow: hidden;">
+  <x-import component="PlaqueFormation" from="./PlaqueFormation.jsx" duration-sec="{{ durationSec }}" abeta-count="{{ abetaCount }}" text-position="{{ textPosition }}" hint-size="100%,100%"></x-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;$preview&quot;: { &quot;width&quot;: &quot;100%&quot;, &quot;height&quot;: &quot;100%&quot; },
+  &quot;durationSec&quot;: { &quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 24, &quot;min&quot;: 14, &quot;max&quot;: 45, &quot;step&quot;: 1, &quot;tsType&quot;: &quot;number&quot; },
+  &quot;abetaCount&quot;: { &quot;editor&quot;: &quot;int&quot;, &quot;default&quot;: 110, &quot;min&quot;: 60, &quot;max&quot;: 200, &quot;step&quot;: 5, &quot;tsType&quot;: &quot;number&quot; },
+  &quot;textPosition&quot;: { &quot;editor&quot;: &quot;enum&quot;, &quot;default&quot;: &quot;bottom&quot;, &quot;options&quot;: [&quot;bottom&quot;, &quot;overlay&quot;], &quot;tsType&quot;: &quot;string&quot; }
+}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      durationSec: this.props.durationSec ?? 24,
+      abetaCount: this.props.abetaCount ?? 110,
+      textPosition: this.props.textPosition ?? 'bottom',
+    };
+  }
+}
+</script>
+</body>
+</html>

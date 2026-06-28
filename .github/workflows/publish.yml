@@ -26,8 +26,10 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
-      - name: Render presentation
-        run: quarto render presentation.qmd
+      - name: Render decks
+        run: |
+          quarto render presentation.qmd
+          quarto render CSF_Disclosure/disclosure.qmd
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
