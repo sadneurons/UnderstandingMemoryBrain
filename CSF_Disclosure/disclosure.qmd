@@ -12,7 +12,7 @@ format:
     chalkboard: true               # drawing: 'b' = chalkboard, 'c' = draw on slide
     transition: fade
     transition-speed: slow
-    width: 1280
+    width: 2000
     height: 720
     footer: "Manchester Brain Health Clinic"
     fig-align: center
