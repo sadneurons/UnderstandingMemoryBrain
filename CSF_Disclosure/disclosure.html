@@ -1507,7 +1507,7 @@
 'jumpToSlide': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleScrollView(event)\"><kbd>r</kbd> Scroll View Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"5\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleChalkboard(event)\"><kbd>b</kbd> Toggle Chalkboard</a></li>\n<li class=\"slide-tool-item\" data-item=\"6\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.toggleNotesCanvas(event)\"><kbd>c</kbd> Toggle Notes Canvas</a></li>\n<li class=\"slide-tool-item\" data-item=\"7\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.downloadDrawings(event)\"><kbd>d</kbd> Download Drawings</a></li>\n<li class=\"slide-tool-item\" data-item=\"8\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
 'chalkboard': {"buttons":true},
-'spotlight': {"size":140,"lockPointerInsideCanvas":false,"toggleSpotlightOnMouseDown":true,"spotlightOnKeyPressAndHold":false,"spotlightCursor":"none","presentingCursor":"default","initialPresentationMode":true,"disablingUserSelect":true,"fadeInAndOut":100,"useAsPointer":false,"pointerColor":"red"},
+'spotlight': {"size":140,"lockPointerInsideCanvas":false,"toggleSpotlightOnMouseDown":false,"spotlightOnKeyPressAndHold":83,"spotlightCursor":"none","presentingCursor":"default","initialPresentationMode":true,"disablingUserSelect":true,"fadeInAndOut":100,"useAsPointer":false,"pointerColor":"red"},
 'smaller': false,
  
         // Display controls in the bottom right corner
@@ -1686,6 +1686,22 @@
           RevealZoom
         ]
       });
+    </script>
+    <script>
+    // Reveal binds 's' to the speaker-notes window by default. The spotlight plugin
+    // is set to show while 's' is held, so free the 's' key from Reveal to avoid the
+    // speaker window popping up. (Setting the keyCode to null marks it handled, which
+    // stops Reveal's built-in and plugin bindings for that key.)
+    (function () {
+      function freeS() {
+        if (window.Reveal && typeof Reveal.isReady === 'function' && Reveal.isReady()) {
+          Reveal.configure({ keyboard: { 83: null } });
+        } else {
+          setTimeout(freeS, 150);
+        }
+      }
+      freeS();
+    })();
     </script>
     <script id="quarto-html-after-body" type="application/javascript">
       window.document.addEventListener("DOMContentLoaded", function (event) {

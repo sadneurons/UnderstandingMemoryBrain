@@ -1,0 +1,16 @@
+<script>
+// Reveal binds 's' to the speaker-notes window by default. The spotlight plugin
+// is set to show while 's' is held, so free the 's' key from Reveal to avoid the
+// speaker window popping up. (Setting the keyCode to null marks it handled, which
+// stops Reveal's built-in and plugin bindings for that key.)
+(function () {
+  function freeS() {
+    if (window.Reveal && typeof Reveal.isReady === 'function' && Reveal.isReady()) {
+      Reveal.configure({ keyboard: { 83: null } });
+    } else {
+      setTimeout(freeS, 150);
+    }
+  }
+  freeS();
+})();
+</script>

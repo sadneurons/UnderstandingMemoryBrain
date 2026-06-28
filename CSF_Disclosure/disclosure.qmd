@@ -19,13 +19,15 @@ format:
     auto-stretch: false
     auto-animate-easing: ease-in-out
     auto-animate-duration: 0.8
+    include-after-body: free-s-key.html   # disable reveal's default 's' (speaker view) so spotlight can use it
 filters:
   - laser-pointer               # press 'q' for the laser pointer (qq = settings)
 spotlight:
   size: 140                     # diameter of the spotlight circle
   presentingCursor: "default"   # keep the normal cursor visible (don't hide it)
   spotlightCursor: "none"       # hide cursor while the spotlight is on
-  toggleSpotlightOnMouseDown: true   # hold the mouse button to show the spotlight
+  toggleSpotlightOnMouseDown: false  # not on mouse-down
+  spotlightOnKeyPressAndHold: 83     # hold the 's' key to show the spotlight
 revealjs-plugins:
   - spotlight
 resources:
