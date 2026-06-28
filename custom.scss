@@ -1,0 +1,144 @@
+/*-- scss:defaults --*/
+// NHS-style patient-facing theme for a brain health clinic.
+// Palette + type chosen for accessibility: high contrast, large sans-serif,
+// calm NHS blues. (NHS Identity colours: https://www.england.nhs.uk/nhsidentity/)
+
+// NHS brand colours
+$nhs-blue:       #005EB8;   // primary NHS Blue
+$nhs-dark-blue:  #003087;   // headings
+$nhs-bright-blue:#0072CE;
+$nhs-pale-grey:  #F0F4F5;   // soft background blocks
+$nhs-text:       #212B32;   // NHS body text
+$nhs-green:      #007F3B;
+
+// Fonts — Frutiger is the NHS typeface; fall back to a clean web-safe stack.
+$font-family-sans-serif:    "Frutiger", "Helvetica Neue", Arial, sans-serif !default;
+$presentation-heading-font: "Frutiger", "Helvetica Neue", Arial, sans-serif !default;
+
+// Surfaces
+$body-bg:    #ffffff !default;
+$body-color: $nhs-text !default;
+$link-color: $nhs-blue !default;
+
+// Headings
+$presentation-heading-color:  $nhs-dark-blue !default;
+$presentation-heading-font-weight: 700 !default;
+
+// Larger root size — comfortable for older patients at the back of a room
+$presentation-font-size-root: 40px !default;
+$presentation-line-height: 1.4 !default;
+
+/*-- scss:rules --*/
+
+// Generous, legible body text
+.reveal {
+  letter-spacing: 0.005em;
+}
+
+.reveal h1, .reveal h2, .reveal h3 {
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+// A coloured rule under section/slide titles for a clean clinical feel
+.reveal h2 {
+  border-bottom: 4px solid #{$nhs-blue};
+  padding-bottom: 0.25em;
+  margin-bottom: 0.6em;
+}
+
+// Title-less image slides: hide the empty heading bar entirely
+.reveal h2:empty {
+  display: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+// Small centred label (e.g. "Pons")
+.reveal .center-text {
+  text-align: center;
+  font-size: 0.9em;
+}
+
+// ---- Highlight "mask layer" over an image (e.g. WMH on the MRI) ----
+// Wrap an <img> in .image-stage and drop .hl-spot markers positioned with
+// left/top/width as % of the image. They scale and stay aligned at any size.
+.reveal .image-stage {
+  position: relative;
+  width: 80%;
+  margin: 0.2em auto 0;
+}
+.reveal .image-stage img {
+  width: 100%;
+  display: block;
+  box-shadow: none;
+  border-radius: 0;
+  background: transparent;
+}
+.reveal .image-stage .hl-spot {
+  position: absolute;
+  transform: translate(-50%, -50%);   // left/top are the CENTRE of the marker
+  aspect-ratio: 1;                     // perfect circle; size set by width only
+  border-radius: 50%;
+  border: 3px solid #FFD400;
+  background: rgba(255, 212, 0, 0.20);
+  box-shadow: 0 0 14px 4px rgba(255, 212, 0, 0.65);
+  pointer-events: none;
+}
+
+// Shape-accurate mask overlay (a transparent PNG that traces the lesions),
+// laid exactly on top of the base image.
+.reveal .image-stage .hl-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  box-shadow: none;
+  border-radius: 0;
+  background: transparent;
+  pointer-events: none;
+}
+
+// Roomy bullets
+.reveal ul { margin-left: 0.3em; }
+.reveal li { margin-bottom: 0.5em; }
+
+// Soft callout for key analogies / takeaways
+.reveal .callout-soft {
+  background: #{$nhs-pale-grey};
+  border-left: 8px solid #{$nhs-blue};
+  padding: 0.6em 0.9em;
+  border-radius: 6px;
+}
+
+// Make framed images look tidy, not boxed-in
+.reveal section img {
+  border: none;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  background: #fff;
+}
+
+// Transparent (cut-out) images: no white fill, no box, no shadow.
+// Add the class to the image: ![](pic.png){.transparent ...}
+.reveal section img.transparent {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+// Captions: smaller, muted
+.reveal .caption, .reveal figcaption {
+  font-size: 0.6em;
+  color: #4C6272;
+}
+
+// Footer + slide number subtle
+.reveal .footer { color: #4C6272; font-size: 0.5em; }
+.reveal .slide-number { font-size: 0.5em; }
+
+// Emphasis colours usable inline: [text]{.blue} / [text]{.green}
+.reveal .blue  { color: #{$nhs-blue};  font-weight: 700; }
+.reveal .green { color: #{$nhs-green}; font-weight: 700; }

@@ -1,0 +1,131 @@
+---
+title: "Understanding Memory and your Brain"
+subtitle: "Manchester Brain Health Clinic"
+author: ""
+date: ""
+format:
+  revealjs:
+    theme: [default, custom.scss]
+    slide-number: false            # cleaner for a patient talk
+    controls: true                 # on-screen arrows for non-keyboard users
+    progress: true                 # thin progress bar at the bottom
+    chalkboard: true               # drawing: 'b' = chalkboard, 'c' = draw on slide
+    transition: fade
+    transition-speed: slow
+    width: 1280
+    height: 720
+    footer: "Manchester Brain Health Clinic"
+    fig-align: center
+    auto-stretch: false            # we set image sizes ourselves (keeps auto-animate working)
+    auto-animate-easing: ease-in-out
+    auto-animate-duration: 0.8
+filters:
+  - laser-pointer               # press 'q' for the laser pointer (qq = settings)
+---
+
+## Grey matter
+
+- Your brain is not all grey matter
+- The grey matter is on the outside
+- The grey matter is specialised
+- A brain scan can show the size of different areas of grey matter
+
+## {.center}
+
+![](assets/gray_white.jpg){.nostretch fig-alt="A brain section showing grey matter and white matter" width="80%"}
+
+## {.center}
+
+![](assets/grey_white_4060.png){.nostretch fig-alt="Grey matter is about 40 percent of the brain and white matter about 60 percent" width="80%"}
+
+## White matter
+
+- Areas of grey matter need to talk to each other, they are wired together
+- The "wiring" is made of long brain cells, and they are coated in fatty tissue
+- The fatty tissue makes the wiring look white - it is called white matter
+
+## White matter is damaged by slow blood flow
+
+```{=html}
+<div class="image-stage">
+  <img src="assets/axial_wmh.jpg" alt="Two MRI scans showing bright patches of white matter damage">
+  <!-- Precise lesion masks (traced from the scan). Left scan on first click, right on second. -->
+  <img class="hl-overlay fragment" data-fragment-index="1" src="assets/wmh_mask_left.png" alt="">
+  <img class="hl-overlay fragment" data-fragment-index="2" src="assets/wmh_mask_right.png" alt="">
+</div>
+```
+
+## Grey matter disease {auto-animate=true}
+
+![](assets/coronal_brain.png){.absolute data-id="brain" top="130" left="240" width="800"}
+
+![](assets/cauliflower.png){.absolute .transparent data-id="cauli" top="460" left="825" width="200"}
+
+![](assets/swiss_roll.png){.absolute .transparent data-id="roll" top="475" left="115" width="150" fig-alt="A swiss roll in cross-section, resembling the rolled-up hippocampus"}
+
+## Grey matter disease {auto-animate=true}
+
+![](assets/coronal_brain.png){.absolute data-id="brain" top="130" left="240" width="800"}
+
+![](assets/cauliflower.png){.absolute .transparent data-id="cauli" top="460" left="660" width="200"}
+
+![](assets/swiss_roll.png){.absolute .transparent data-id="roll" top="525" left="415" width="50" fig-alt="A swiss roll in cross-section, resembling the rolled-up hippocampus"}
+
+## Grey matter disease {auto-animate=true}
+
+![](assets/coronal_brain.png){.absolute data-id="brain" top="130" left="240" width="800"}
+
+![](assets/cauliflower.png){.absolute .transparent data-id="cauli" top="460" left="825" width="200"}
+
+![](assets/swiss_roll.png){.absolute .transparent data-id="roll" top="475" left="115" width="150" fig-alt="A swiss roll in cross-section, resembling the rolled-up hippocampus"}
+
+## What is the job of the hippocampus?
+
+:::: {.columns}
+
+::: {.column width="52%"}
+- The brain's filing cabinets
+- Store new information
+- Recall previously learned information
+- Things are stored thematically (like is stored with like)
+:::
+
+::: {.column width="48%"}
+![](assets/filing_cabinet.jpg){.nostretch fig-alt="A row of filing cabinets" width="78%"}
+:::
+
+::::
+
+## The progress of Alzheimer disease
+
+![](assets/control_dlb_ad_nolabel.png){.absolute top="150" left="100" width="1100" fig-alt="Three brain scans showing increasing shrinkage" width="90%"}
+
+## {.center}
+
+![](assets/healthy_vs_ad.png){.nostretch fig-alt="A healthy brain next to a brain affected by Alzheimer's disease" width="80%"}
+
+## Hippocampus not the only area affected by AD
+
+- The first areas affected may show signs - under the microscope - 20 years before
+- Some areas affecting sleep
+- Some areas affecting mood
+
+## Locus Coeruleus
+
+(The blue bit)
+
+:::: {.columns}
+
+::: {.column width="52%"}
+![](assets/brainstem_engraving.png){.nostretch fig-alt="An anatomical drawing of the brainstem" width="80%"}
+:::
+
+::: {.column width="48%"}
+![](assets/locus_coeruleus.png){.nostretch fig-alt="A diagram of the pons with the locus coeruleus marked in blue" width="92%"}
+
+::: {.center-text}
+Pons
+:::
+:::
+
+::::
