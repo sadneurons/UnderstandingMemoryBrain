@@ -21,6 +21,13 @@ format:
     auto-animate-duration: 0.8
 filters:
   - laser-pointer               # press 'q' for the laser pointer (qq = settings)
+spotlight:
+  size: 140                     # diameter of the spotlight circle
+  presentingCursor: "default"   # keep the normal cursor visible (don't hide it)
+  spotlightCursor: "none"       # hide cursor while the spotlight is on
+  toggleSpotlightOnMouseDown: true   # hold the mouse button to show the spotlight
+revealjs-plugins:
+  - spotlight
 resources:
   - assets/biomarker_cascade.html
   - assets/amyloid_aggregation.html
