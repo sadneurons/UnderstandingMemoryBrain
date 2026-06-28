@@ -19,6 +19,7 @@ format:
     auto-stretch: false            # we set image sizes ourselves (keeps auto-animate working)
     auto-animate-easing: ease-in-out
     auto-animate-duration: 0.8
+    include-after-body: qr.html   # QR badge fixed in the lower-right of every slide
 filters:
   - laser-pointer               # press 'q' for the laser pointer (qq = settings)
 ---
@@ -32,7 +33,7 @@ filters:
 
 ## {.center}
 
-![](assets/gray_white.jpg){.nostretch fig-alt="A brain section showing grey matter and white matter" width="80%"}
+![](assets/gray_white.jpg){.nostretch fig-alt="A brain section showing grey matter and white matter" width="90%"}
 
 ## {.center}
 
